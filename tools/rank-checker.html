@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rank Checker Tool — g.sarkariresultrank.com</title>
+  <meta name="description" content="Estimate your exam rank using the Rank Checker Tool. Input your category, state, gender, language, and answer key URL to get an estimated rank without API." />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="Rank Checker Tool" />
+  <meta property="og:description" content="Estimate your exam rank using the Rank Checker Tool. Input your details and answer key URL for an estimated rank prediction." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://g.sarkariresultrank.com/tools/rank-checker.html" />
+  <meta property="og:image" content="https://g.sarkariresultrank.com/logo.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gradient: linear-gradient(135deg, #6d28d9, #2563eb);
+      --accent: #c8102e;
+      --accent-600: #a50e25;
+      --bg: #f6f7fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --border: #e5e7eb;
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(20, 24, 40, 0.08);
+      --ring: 0 0 0 4px rgba(200, 16, 46, 0.18);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0b1020;
+        --card: #121a2b;
+        --text: #e5e7eb;
+        --muted: #9aa3b2;
+        --border: #1f2a44;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        --ring: 0 0 0 4px rgba(200, 16, 46, 0.28);
+      }
+    }
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 100% -80%, rgba(37,99,235,0.08), transparent 60%),
+                  radial-gradient(1000px 500px at -10% 0%, rgba(109,40,217,0.08), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    header.site-header {
+      background: var(--gradient);
+      color: #fff;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 8px 30px rgba(8,12,30,0.18);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    header .logo { width: 52px; height: 52px; border-radius: 12px; overflow: hidden; flex: 0 0 auto; }
+    header .logo svg { display: block; width: 100%; height: 100% }
+    header .site-title { font-weight: 800; font-size: 1.05rem; letter-spacing: 0.2px }
+    nav.top-nav { margin-left: auto; display: flex; gap: 6px; align-items: center; flex-wrap: wrap }
+    nav.top-nav a {
+      color: rgba(255,255,255,0.96);
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: background-color .2s ease, transform .2s ease;
+    }
+    nav.top-nav a:hover { background: rgba(255,255,255,0.10); transform: translateY(-1px) }
+
+    /* Main card */
+    main.container {
+      flex-grow: 1;
+      max-width: 760px;
+      margin: 28px auto;
+      padding: 0 16px;
+      width: 100%;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+    .page-title {
+      margin: 0 0 6px 0;
+      font-size: 1.9rem;
+      font-weight: 800;
+      letter-spacing: -0.4px;
+      text-align: center;
+      color: var(--accent);
+    }
+    .subtitle { text-align: center; color: var(--muted); margin: 0 0 18px 0 }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px }
+    @media (max-width: 640px) { .grid { grid-template-columns: 1fr } }
+
+    label { font-weight: 700; display: block; margin: 8px 0 6px 2px; font-size: 0.95rem }
+    select, input[type=url] {
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1.8px solid var(--border);
+      background: transparent;
+      color: inherit;
+      font-size: 1rem;
+      transition: box-shadow .2s ease, border-color .2s ease, transform .06s ease;
+    }
+    select:focus, input[type=url]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: var(--ring);
+    }
+    .hint { color: var(--muted); font-size: 0.9rem; margin-top: 6px }
+
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px }
+    button.btn {
+      padding: 12px 14px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      background: var(--accent);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform .08s ease, background-color .2s ease, box-shadow .2s ease;
+    }
+    button.btn:hover { background: var(--accent-600) }
+    button.btn:active { transform: translateY(1px) }
+    button.secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 1.8px solid var(--accent);
+    }
+
+    .result-box {
+      background: linear-gradient(180deg, rgba(148,163,184,0.08), transparent 18%) , var(--card);
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      padding: 16px 14px;
+      font-size: 1.02rem;
+      white-space: pre-wrap;
+      min-height: 120px;
+      user-select: text;
+      line-height: 1.6;
+    }
+
+    .ad-slot {
+      background: linear-gradient(90deg,#fbfbfd,#ffffff);
+      border: 1px dashed var(--border);
+      padding: 16px;
+      border-radius: 12px;
+      text-align: center;
+      color: var(--muted);
+      user-select: none;
+    }
+
+    footer.site-footer {
+      background: var(--gradient);
+      color: #fff;
+      padding: 18px;
+      text-align: center;
+      font-weight: 700;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      margin-top: 26px;
+    }
+    footer.site-footer a { color: rgba(255,255,255,0.96); text-decoration: none }
+
+    .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: rgba(200,16,46,0.08); color: var(--accent); font-weight: 700; font-size: 0.9rem }
+  </style>
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <div class="logo" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="56" height="56" role="img" aria-label="g.SR logo">
+        <defs>
+          <linearGradient id="g" x1="0" x2="1">
+            <stop offset="0" stop-color="#6d28d9"/>
+            <stop offset="1" stop-color="#2563eb"/>
+          </linearGradient>
+        </defs>
+        <rect width="200" height="200" rx="28" fill="url(#g)"/>
+        <text x="50%" y="58%" font-size="36" font-family="Arial, Inter, sans-serif" fill="#fff" font-weight="700" text-anchor="middle">g.SR</text>
+      </svg>
+    </div>
+    <div class="site-title">g.sarkariresultrank.com</div>
+    <nav class="top-nav" role="navigation" aria-label="Main">
+      <a href="../index.html">Home</a>
+      <a href="../about.html">About Us</a>
+      <a href="../index.html#tools">All Tools</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <main class="container" role="main" aria-label="Rank Checker Tool">
+    <div class="card" aria-labelledby="title">
+      <div class="badge" style="margin-bottom:8px">Fast • Private • No sign‑in</div>
+      <h1 id="title" class="page-title">Rank Checker Tool</h1>
+      <p class="subtitle">Estimate your potential score, percentile, and rank instantly. All processing is done in your browser.</p>
+
+      <div class="ad-slot" role="region" aria-label="Ad space (header)" style="margin-bottom: 16px">
+        AD PLACEHOLDER — Header Banner
+      </div>
+
+      <form id="rankForm" aria-describedby="resultBox" novalidate>
+        <div class="grid">
+          <div>
+            <label for="category">Category</label>
+            <select id="category" required aria-required="true">
+              <option value="">Select Category</option>
+              <option>General</option>
+              <option>OBC</option>
+              <option>SC</option>
+              <option>ST</option>
+            </select>
+          </div>
+          <div>
+            <label for="state">State</label>
+            <select id="state" required aria-required="true">
+              <option value="">Select State</option>
+              <option>Uttar Pradesh</option>
+              <option>Bihar</option>
+              <option>Delhi</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="gender">Gender</label>
+            <select id="gender" required aria-required="true">
+              <option value="">Select Gender</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+          <div>
+            <label for="language">Paper Language</label>
+            <select id="language" required aria-required="true">
+              <option value="">Select Language</option>
+              <option>Hindi</option>
+              <option>English</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="answerKeyUrl" style="margin-top:12px">Answer Key URL</label>
+        <input type="url" id="answerKeyUrl" placeholder="https://example.com/answerkey" required aria-required="true" inputmode="url" autocomplete="off"/>
+        <p class="hint">Paste the official answer key link. We do not upload or store your data.</p>
+
+        <div class="actions">
+          <button type="submit" class="btn" aria-label="Submit for Rank Estimation">Estimate Rank</button>
+          <button type="button" class="btn secondary" id="resetBtn" aria-label="Reset form">Reset</button>
+        </div>
+      </form>
+
+      <div id="resultWrap" style="margin-top:16px; display:none;">
+        <pre id="resultBox" class="result-box" tabindex="0" aria-live="polite" aria-atomic="true"></pre>
+      </div>
+
+      <div class="ad-slot" role="region" aria-label="Ad space (footer)" style="margin-top: 18px">
+        AD PLACEHOLDER — Footer Banner
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    © <span id="yr"></span> g.sarkariresultrank.com — All Rights Reserved.
+    <div style="margin-top:8px;font-weight:600">
+      <a href="../about.html" style="margin-right:10px">About Us</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    const form = document.getElementById('rankForm');
+    const resultWrap = document.getElementById('resultWrap');
+    const resultBox = document.getElementById('resultBox');
+    const resetBtn = document.getElementById('resetBtn');
+
+    // Basic client-side validation and UX
+    function showError(input, message) {
+      input.setAttribute('aria-invalid', 'true');
+      input.style.borderColor = 'var(--accent)';
+      input.style.boxShadow = 'var(--ring)';
+      if (message) {
+        input.title = message;
+      }
+    }
+    function clearError(input) {
+      input.removeAttribute('aria-invalid');
+      input.style.borderColor = '';
+      input.style.boxShadow = '';
+      input.title = '';
+    }
+
+    function validateUrl(value) {
+      try {
+        const u = new URL(value);
+        return Boolean(u.protocol === 'http:' || u.protocol === 'https:');
+      } catch { return false; }
+    }
+
+    // Persist last inputs (optional, local only)
+    const fields = ['category','state','gender','language','answerKeyUrl'];
+    const storageKey = 'rankChecker:lastInputs';
+    const saved = localStorage.getItem(storageKey);
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        fields.forEach(id => { if (data[id]) document.getElementById(id).value = data[id]; });
+      } catch {}
+    }
+
+    form.addEventListener('input', () => {
+      const data = {};
+      fields.forEach(id => data[id] = document.getElementById(id).value);
+      localStorage.setItem(storageKey, JSON.stringify(data));
+    });
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const category = document.getElementById('category');
+      const state = document.getElementById('state');
+      const gender = document.getElementById('gender');
+      const language = document.getElementById('language');
+      const answerKeyUrl = document.getElementById('answerKeyUrl');
+
+      // Validate
+      let ok = true;
+      [category, state, gender, language, answerKeyUrl].forEach(el => clearError(el));
+      if (!category.value) { showError(category, 'Please select your category.'); ok = false; }
+      if (!state.value)    { showError(state, 'Please select your state.'); ok = false; }
+      if (!gender.value)   { showError(gender, 'Please select your gender.'); ok = false; }
+      if (!language.value) { showError(language, 'Please select paper language.'); ok = false; }
+      if (!answerKeyUrl.value || !validateUrl(answerKeyUrl.value.trim())) {
+        showError(answerKeyUrl, 'Provide a valid Answer Key URL.'); ok = false;
+      }
+      if (!ok) return;
+
+      resultWrap.style.display = 'block';
+      resultBox.textContent = 'Estimating rank... Please wait.';
+
+      // Seeded pseudo-randomness for a stable experience per input
+      const seedString = [category.value, state.value, gender.value, language.value, answerKeyUrl.value.trim()].join('|');
+      let seed = 0;
+      for (let i = 0; i < seedString.length; i++) seed = (seed * 31 + seedString.charCodeAt(i)) >>> 0;
+      function rand() {
+        // xorshift32
+        let x = seed || 123456789;
+        x ^= x << 13; x ^= x >>> 17; x ^= x << 5; seed = x >>> 0;
+        return (seed % 10000) / 10000;
+      }
+
+      setTimeout(() => {
+        const score = (60 + rand() * 35).toFixed(1);
+        const basePercentile = category.value === 'General' ? 85 : category.value === 'OBC' ? 90 : 92;
+        const percentile = Math.min(99.5, (basePercentile + rand() * 5)).toFixed(2);
+        let populationFactor = 1000000;
+        switch(state.value) {
+          case 'Uttar Pradesh': populationFactor = 5000000; break;
+          case 'Bihar': populationFactor = 3000000; break;
+          case 'Delhi': populationFactor = 1000000; break;
+          default: populationFactor = 1500000;
+        }
+        const rank = Math.max(1, Math.floor(populationFactor * ((100 - percentile) / 100)));
+
+        resultBox.textContent =
+          `✅ Estimated Score: ${score}/100\n` +
+          `📊 Estimated Percentile: ${percentile}%\n` +
+          `🏆 Estimated Rank: ${rank.toLocaleString()}\n` +
+          `ℹ️ Note: This is an estimated prediction based on submitted details and mock logic. Not official.`;
+      }, 900);
+    });
+
+    resetBtn.addEventListener('click', () => {
+      form.reset();
+      localStorage.removeItem(storageKey);
+      resultWrap.style.display = 'none';
+      resultBox.textContent = '';
+      const first = document.getElementById('category');
+      first.focus();
+    });
+  </script>
+
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebApplication",
+    "name":"Rank Checker Tool",
+    "url":"https://g.sarkariresultrank.com/tools/rank-checker.html",
+    "applicationCategory":"EducationApplication",
+    "description":"Estimate your exam rank with the Rank Checker Tool using your category, state, gender, language, and answer key URL.",
+    "operatingSystem":"All"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {"@type":"Question","name":"How accurate is the rank estimation?","acceptedAnswer":{"@type":"Answer","text":"The rank is an estimate based on mock logic and should not be considered official."}},
+      {"@type":"Question","name":"Is my data saved?","acceptedAnswer":{"@type":"Answer","text":"No, all data is processed locally in your browser only."}}
+    ]
+  }
+  </script>
+</body>
+</html>
